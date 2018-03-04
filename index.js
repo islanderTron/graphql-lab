@@ -1,3 +1,5 @@
+var express = require('express');
+var graphHTTP = require('express-graphql');
 var { graphql, buildSchema } = require('graphql');
 
 // Construct a schema, using GraphQL schema language
@@ -18,3 +20,12 @@ var root = {
 graphql(schema, '{hello}', root).then((response) => {
     console.log(response);
 });
+
+var app = express();
+app.use('/graphql', graphHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+}));
+app.listen(4000);
+console.log('Running a GraphQL API server at localhost:4000/graphql');
